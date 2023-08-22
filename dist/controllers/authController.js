@@ -11,11 +11,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createUser = void 0;
 const authDao_1 = require("../dao/authDao");
-const mongoConnection_1 = require("../middlewares/mongoConnection");
-const authDao = new authDao_1.AuthDao(mongoConnection_1.MongoConnection.getDb());
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, role, password } = req.body;
     try {
+        const authDao = new authDao_1.AuthDao(req.db); // Create authDao instance with the request's db reference
         const user = yield authDao.createUser(username, role, password);
         res.status(200).json({
             message: 'success',

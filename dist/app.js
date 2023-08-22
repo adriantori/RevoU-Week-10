@@ -13,13 +13,18 @@ const port = process.env.APP_PORT || 3000;
 app.use(express_1.default.json());
 const mongoUri = process.env.APP_MONGO_URI || "";
 const dbName = process.env.APP_MONGO_DB || "";
-mongoConnection_1.MongoConnection.connect(mongoUri, dbName);
-const addDbToRequest = (req, res, next) => {
-    req.db = mongoConnection_1.MongoConnection.getDb();
-    next();
-};
-app.use(addDbToRequest);
-app.use("/api/v1", authRoute_1.authRoute);
-app.listen(port, () => {
-    console.log(`running on port ${port}`);
+mongoConnection_1.MongoConnection.connect(mongoUri, dbName)
+    .then(() => {
+    const addDbToRequest = (req, res, next) => {
+        req.db = mongoConnection_1.MongoConnection.getDb();
+        next();
+    };
+    app.use(addDbToRequest);
+    app.use("/api/v1", authRoute_1.authRoute);
+    app.listen(port, () => {
+        console.log(`Running on port ${port}`);
+    });
+})
+    .catch(error => {
+    console.error("Error connecting to the database:", error);
 });

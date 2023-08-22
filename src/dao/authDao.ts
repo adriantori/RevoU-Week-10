@@ -1,6 +1,6 @@
 import { Db } from 'mongodb';
 
-export class AuthDao {
+class AuthDao {
   private db: Db;
 
   constructor(db: Db) {
@@ -16,3 +16,5 @@ export class AuthDao {
     }
   }
 }
+
+export { AuthDao };

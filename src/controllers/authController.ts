@@ -1,13 +1,12 @@
 import { Request, Response } from 'express';
-import { AuthDao } from '../dao/authDao'
-import { MongoConnection } from '../middlewares/mongoConnection';
-
-const authDao = new AuthDao(MongoConnection.getDb());
+import { AuthDao } from '../dao/authDao';
 
 const createUser = async (req: Request, res: Response) => {
   const { username, role, password } = req.body;
 
   try {
+    const authDao = new AuthDao(req.db); // Create authDao instance with the request's db reference
+
     const user = await authDao.createUser(username, role, password);
     res.status(200).json({
       message: 'success',
