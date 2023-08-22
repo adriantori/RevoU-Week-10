@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { MongoConnection } from "./middlewares/mongoConnection";
 import dotenv from "dotenv";
 import { authRoute } from "./routes/authRoute";
+import { transferRoute } from "./routes/transferRoute";
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ MongoConnection.connect(mongoUri, dbName)
     app.use(addDbToRequest);
 
     app.use("/api/v1", authRoute);
+    app.use("/api/v1", transferRoute);
 
     app.listen(port, () => {
       console.log(`Running on port ${port}`);

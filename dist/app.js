@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const mongoConnection_1 = require("./middlewares/mongoConnection");
 const dotenv_1 = __importDefault(require("dotenv"));
 const authRoute_1 = require("./routes/authRoute");
+const transferRoute_1 = require("./routes/transferRoute");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.APP_PORT || 3000;
@@ -21,6 +22,7 @@ mongoConnection_1.MongoConnection.connect(mongoUri, dbName)
     };
     app.use(addDbToRequest);
     app.use("/api/v1", authRoute_1.authRoute);
+    app.use("/api/v1", transferRoute_1.transferRoute);
     app.listen(port, () => {
         console.log(`Running on port ${port}`);
     });

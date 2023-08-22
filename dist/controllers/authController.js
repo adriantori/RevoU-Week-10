@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = void 0;
+exports.getAllUsers = exports.createUser = void 0;
 const authDao_1 = require("../dao/authDao");
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, role, password } = req.body;
@@ -29,3 +29,20 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.createUser = createUser;
+const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const authDao = new authDao_1.AuthDao(req.db); // Create authDao instance with the request's db reference
+        const user = yield authDao.getAllUser();
+        res.status(200).json({
+            message: 'success',
+            data: user
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: 'error',
+            error: error.message
+        });
+    }
+});
+exports.getAllUsers = getAllUsers;

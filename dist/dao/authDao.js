@@ -25,5 +25,16 @@ class AuthDao {
             }
         });
     }
+    getAllUser() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield this.db.collection('users').find().toArray();
+                return user;
+            }
+            catch (error) {
+                throw new Error('Error getting any user:' + error.message);
+            }
+        });
+    }
 }
 exports.AuthDao = AuthDao;

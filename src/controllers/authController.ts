@@ -20,4 +20,21 @@ const createUser = async (req: Request, res: Response) => {
   }
 };
 
-export { createUser };
+const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const authDao = new AuthDao(req.db); // Create authDao instance with the request's db reference
+
+    const user = await authDao.getAllUser();
+    res.status(200).json({
+      message: 'success',
+      data: user
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      message: 'error',
+      error: error.message
+    });
+  }
+};
+
+export { createUser, getAllUsers };
