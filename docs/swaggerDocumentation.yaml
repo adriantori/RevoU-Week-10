@@ -1,123 +1,18 @@
 openapi: 3.0.0
 info:
-  title: API Week-10 Version 1
+  title: 'API Documentation - RevoU Week 10'
   version: '1.0'
+  description: 'For transfer from user to other user. Middleware, authentication, and authorization assignment.'
 servers:
-  - url: http://localhost:3000
-    description: Local development server
-paths:
-  /register:
-    post:
-      summary: Register New User
-      operationId: registerNewUser
-      requestBody:
-        description: New user registration data
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/registerNewUserRequest'
-            example:
-              username: maker123
-              role: maker
-              password: maker123
-      responses:
-        '200':
-          description: Registration successful
-  /login:
-    post:
-      summary: User Login
-      operationId: login
-      requestBody:
-        description: User login credentials
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/loginrequest'
-            example:
-              username: maker123
-              password: toni
-      responses:
-        '200':
-          description: Login successful
-  /transfer:
-    get:
-      summary: Get All Transfer Requests
-      operationId: getAllTransferRequests
-      responses:
-        '200':
-          description: Successful response
-      security:
-        - bearer: []
-    post:
-      summary: Create New Transfer Request
-      operationId: CreateNewTransferRequest
-      requestBody:
-        description: Transfer request data
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateNewTransferRequestRequest'
-            example:
-              amount: 5000
-              currency: IDR
-              sourceAccount: 64e45ad04e563816b50c6701
-              destinationAccount: 64e4d44a5f843411c24187c2
-      responses:
-        '200':
-          description: Transfer request created
-      security:
-        - bearer: []
-  /:
-    patch:
-      summary: Update Transfer Request
-      operationId: updateTransferRequest
-      requestBody:
-        description: Transfer update data
-        required: true
-        content:
-          text/plain:
-            schema:
-              type: string
-              example: |
-                // Role: admin (advanced), maker (standard), approver (beneath admin)
-
-                {
-                    "transaction_id": "",
-                    "status": ""
-                }
-      responses:
-        '200':
-          description: Transfer request updated
-      security:
-        - bearer: []
-    delete:
-      summary: Delete Transfer Request
-      operationId: deleteTransferRequest
-      responses:
-        '200':
-          description: Transfer request deleted
-      security:
-        - bearer: []
-  /api:
-    get:
-      summary: Check Connection to Server
-      operationId: checkConnectionToServer
-      responses:
-        '200':
-          description: Server connection is active
-  /users:
-    get:
-      summary: Get All Users
-      operationId: getAllUsers
-      responses:
-        '200':
-          description: List of users
-      security:
-        - bearer: []
+  - url: http://localhost:3000/api/v1
+    description: 'Local development server'
 components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Bearer with JWT Token'
   schemas:
     registerNewUserRequest:
       type: object
@@ -171,9 +66,107 @@ components:
         currency: IDR
         sourceAccount: 64e45ad04e563816b50c6701
         destinationAccount: 64e4d44a5f843411c24187c2
-security:
-  - securityRequirement: []
-tags:
-  - name: auth
-  - name: transfer
-  - name: devTesting
+paths:
+  /register:
+    post:
+      summary: Register New User
+      operationId: registerNewUser
+      requestBody:
+        description: New user registration data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/registerNewUserRequest'
+            example:
+              username: maker123
+              role: maker
+              password: maker123
+      responses:
+        '200':
+          description: Registration successful
+  /login:
+    post:
+      summary: User Login
+      operationId: login
+      requestBody:
+        description: User login credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginrequest'
+            example:
+              username: maker123
+              password: toni
+      responses:
+        '200':
+          description: Login successful
+  /transfer:
+    get:
+      security:
+        - bearer: []
+      summary: Get All Transfer Requests
+      operationId: getAllTransferRequests
+      responses:
+        '200':
+          description: Successful response
+    post:
+      security:
+        - bearer: []
+      summary: Create New Transfer Request
+      operationId: CreateNewTransferRequest
+      requestBody:
+        description: Transfer request data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNewTransferRequestRequest'
+            example:
+              amount: 5000
+              currency: IDR
+              sourceAccount: 64e45ad04e563816b50c6701
+              destinationAccount: 64e4d44a5f843411c24187c2
+      responses:
+        '200':
+          description: Transfer request created
+  /:
+    patch:
+      security:
+        - bearer: []
+      summary: Update Transfer Request
+      operationId: updateTransferRequest
+      requestBody:
+        description: Transfer update data
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+              example: |
+                // Role: admin (advanced), maker (standard), approver (beneath admin)
+
+                {
+                    "transaction_id": "",
+                    "status": ""
+                }
+      responses:
+        '200':
+          description: Transfer request updated
+    delete:
+      security:
+        - bearer: []
+      summary: Delete Transfer Request
+      operationId: deleteTransferRequest
+      responses:
+        '200':
+          description: Transfer request deleted
+  /users:
+    get:
+      summary: Get All Users
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: List of users
+security: []

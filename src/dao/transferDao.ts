@@ -1,4 +1,4 @@
-import { Db } from 'mongodb';
+import { Db, ObjectId } from 'mongodb';
 
 class TransferDao {
   private db: Db;
@@ -22,6 +22,24 @@ class TransferDao {
       return user
     } catch (error: any) {
       throw new Error('Error getting any transfer:' + error.message)
+    }
+  }
+
+  async updateTransfer(transferId: ObjectId, status: string): Promise<any> {
+    try {
+      const user = await this.db.collection('transfer').updateOne({ _id: transferId}, {$set: {status: status}});
+      return user;
+    } catch (error: any) {
+      throw new Error('Error updating data:' + error.message);
+    }
+  }
+  
+  async deleteTransfer(transferId: ObjectId): Promise<any> {
+    try {
+      const user = await this.db.collection('transfer').updateOne({ _id: transferId}, {$set: {isDeleted: "true"}});
+      return user;
+    } catch (error: any) {
+      throw new Error('Error updating data:' + error.message);
     }
   }
 }

@@ -6,12 +6,45 @@ import JWT_SIGN from '../config/jwt';
 
 const registerUser = async (req: Request, res: Response) => {
   const { username, role, password } = req.body;
+  const sanitizedRole = role.toLowerCase();
 
   try {
+    const validateUsername = (username: string): boolean => {
+      return !!username && username.trim() !== '';
+    };
+    
+    const validateRole = (role: string): boolean => {
+      const validRoles = ['maker', 'approver', 'admin'];
+      return validRoles.includes(role);
+    };
+    
+    const validatePassword = (password: string): boolean => {
+      const alphanumericPattern = /^[a-zA-Z0-9]{8,}$/;
+      return alphanumericPattern.test(password);
+    };
+    
+    if (!validateUsername(username)) {
+      return res.status(400).json({
+        message: 'User field cannot be blank'
+      });
+    }
+    
+    if (!validateRole(sanitizedRole)) {
+      return res.status(400).json({
+        message: 'Role is invalid. Must contain either "maker", "approver", or "admin"'
+      });
+    }
+    
+    if (!validatePassword(password)) {
+      return res.status(400).json({
+        message: 'Password is invalid. Must contain alphanumeric and minimum 8 characters'
+      });
+    }
+    
     const authDao = new AuthDao(req.db);
     const authService = new AuthService(authDao);
     
-    const user = await authService.registerUser(username, role, password);
+    const user = await authService.registerUser(username, sanitizedRole, password);
     res.status(200).json({
       message: 'success',
       data: user

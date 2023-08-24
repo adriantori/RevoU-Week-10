@@ -18,13 +18,13 @@ class AuthService {
     return await this.authDao.getAllUser();
   }
 
-  async loginUser(username:string, password: string){
+  async loginUser(username: string, password: string) {
     try {
       const user = await this.authDao.loginUser(username);
 
-      if(user){
+      if (user) {
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
-        if (isPasswordCorrect){
+        if (isPasswordCorrect) {
           return user
         }
       }
@@ -32,7 +32,7 @@ class AuthService {
     } catch (error: any) {
       throw new Error("login error: " + error.message);
     }
-    
+
   }
 }
 

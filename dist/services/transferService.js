@@ -23,5 +23,15 @@ class TransferService {
             return yield this.transferDao.getAllTransfer();
         });
     }
+    updateTransfer(transactionId, status) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.transferDao.updateTransfer(transactionId, status);
+        });
+    }
+    deleteTransfer(transactionId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.transferDao.deleteTransfer(transactionId);
+        });
+    }
 }
 exports.default = TransferService;

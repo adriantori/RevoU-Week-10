@@ -19,10 +19,37 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const jwt_1 = __importDefault(require("../config/jwt"));
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, role, password } = req.body;
+    const sanitizedRole = role.toLowerCase();
     try {
+        const validateUsername = (username) => {
+            return !!username && username.trim() !== '';
+        };
+        const validateRole = (role) => {
+            const validRoles = ['maker', 'approver', 'admin'];
+            return validRoles.includes(role);
+        };
+        const validatePassword = (password) => {
+            const alphanumericPattern = /^[a-zA-Z0-9]{8,}$/;
+            return alphanumericPattern.test(password);
+        };
+        if (!validateUsername(username)) {
+            return res.status(400).json({
+                message: 'User field cannot be blank'
+            });
+        }
+        if (!validateRole(sanitizedRole)) {
+            return res.status(400).json({
+                message: 'Role is invalid. Must contain either "maker", "approver", or "admin"'
+            });
+        }
+        if (!validatePassword(password)) {
+            return res.status(400).json({
+                message: 'Password is invalid. Must contain alphanumeric and minimum 8 characters'
+            });
+        }
         const authDao = new authDao_1.AuthDao(req.db);
         const authService = new authService_1.default(authDao);
-        const user = yield authService.registerUser(username, role, password);
+        const user = yield authService.registerUser(username, sanitizedRole, password);
         res.status(200).json({
             message: 'success',
             data: user
@@ -41,7 +68,6 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const authDao = new authDao_1.AuthDao(req.db);
     const authService = new authService_1.default(authDao);
     const user = yield authService.loginUser(username, password);
-    console.log(jwt_1.default);
     if (user) {
         const token = jsonwebtoken_1.default.sign({ username: user.username, id: user._id, role: user.role }, jwt_1.default);
         res.status(200).json({

@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import { TransferDao } from '../dao/transferDao';
 
 class TransferService {
@@ -13,6 +14,14 @@ class TransferService {
 
   async getAllTransfers() {
     return await this.transferDao.getAllTransfer();
+  }
+
+  async updateTransfer(transactionId: ObjectId, status: string){
+    return await this.transferDao.updateTransfer(transactionId, status);
+  }
+
+  async deleteTransfer(transactionId: ObjectId){
+    return await this.transferDao.deleteTransfer(transactionId);
   }
 }
 

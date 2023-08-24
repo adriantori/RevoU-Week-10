@@ -36,5 +36,27 @@ class TransferDao {
             }
         });
     }
+    updateTransfer(transferId, status) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield this.db.collection('transfer').updateOne({ _id: transferId }, { $set: { status: status } });
+                return user;
+            }
+            catch (error) {
+                throw new Error('Error updating data:' + error.message);
+            }
+        });
+    }
+    deleteTransfer(transferId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield this.db.collection('transfer').updateOne({ _id: transferId }, { $set: { isDeleted: "true" } });
+                return user;
+            }
+            catch (error) {
+                throw new Error('Error updating data:' + error.message);
+            }
+        });
+    }
 }
 exports.TransferDao = TransferDao;

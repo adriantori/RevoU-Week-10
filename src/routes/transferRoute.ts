@@ -1,9 +1,14 @@
 import { Router } from "express";
+import { createTransfer, getAllTransfers, patchTransfer } from "../controllers/transferController";
+import authn from "../middlewares/authn";
 
-import { createTransfer, getAllTransfers } from "../controllers/transferController";
+const transferRoute = Router()
 
-export const transferRoute = Router();
+transferRoute.post('/transfer',authn(["maker", "approver","admin"]), createTransfer);
 
-transferRoute.post('/transfer', createTransfer);
+transferRoute.get('/transfer', authn(["maker", "approver","admin"]), getAllTransfers);
 
-transferRoute.get('/transfer', getAllTransfers)
+transferRoute.patch('/transfer/:id', authn(["approver","admin"]), patchTransfer);
+
+transferRoute.delete('/transfer:id', authn(["admin"]))
+export default transferRoute;
