@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchTransfer = exports.getAllTransfers = exports.createTransfer = void 0;
+exports.deleteTransfer = exports.patchTransfer = exports.getAllTransfers = exports.createTransfer = void 0;
 const transferDao_1 = require("../dao/transferDao");
 const transferService_1 = __importDefault(require("../services/transferService")); // Update the path as needed
 const mongodb_1 = require("mongodb");
@@ -56,10 +56,10 @@ exports.getAllTransfers = getAllTransfers;
 const patchTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const transactionIdString = req.params.id;
     const status = req.body.status.toLowerCase();
-    if (status !== 'approved' && status !== 'denied') {
+    if (status !== 'approved' && status !== 'rejected') {
         return res.status(400).json({
             message: 'error',
-            error: 'Invalid status. Status must be either "approved" or "denied".'
+            error: 'Invalid status. Status must be either "approved" or "rejected".'
         });
     }
     try {
@@ -99,3 +99,4 @@ const deleteTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
 });
+exports.deleteTransfer = deleteTransfer;

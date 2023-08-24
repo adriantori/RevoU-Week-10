@@ -21,7 +21,7 @@ const file = fs_1.default.readFileSync(openApiPath, 'utf8');
 const swaggerDocument = yaml_1.default.parse(file);
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
+app.use('/', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 app.use(openApiValidator.middleware({
     apiSpec: openApiPath,
     validateRequests: true

@@ -45,10 +45,10 @@ const patchTransfer = async (req: Request, res: Response) => {
   const transactionIdString: string = req.params.id;
   const status = req.body.status.toLowerCase();
 
-  if (status !== 'approved' && status !== 'denied') {
+  if (status !== 'approved' && status !== 'rejected') {
     return res.status(400).json({
       message: 'error',
-      error: 'Invalid status. Status must be either "approved" or "denied".'
+      error: 'Invalid status. Status must be either "approved" or "rejected".'
     });
   }
 
@@ -91,4 +91,4 @@ const deleteTransfer = async (req: Request, res: Response) => {
   }
 };
 
-export { createTransfer, getAllTransfers, patchTransfer };
+export { createTransfer, getAllTransfers, patchTransfer, deleteTransfer };
