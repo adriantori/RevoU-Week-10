@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { TransferDao } from '../dao/transferDao';
-import TransferService from '../services/transferService'; // Update the path as needed
+import TransferService from '../services/transferService';
 import { ObjectId } from 'mongodb';
 
 const createTransfer = async (req: Request, res: Response) => {

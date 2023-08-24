@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteTransfer = exports.patchTransfer = exports.getAllTransfers = exports.createTransfer = void 0;
 const transferDao_1 = require("../dao/transferDao");
-const transferService_1 = __importDefault(require("../services/transferService")); // Update the path as needed
+const transferService_1 = __importDefault(require("../services/transferService"));
 const mongodb_1 = require("mongodb");
 const createTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { amount, currency, sourceAccount, destinationAccount } = req.body;

@@ -17,9 +17,9 @@ const auth = (allowedRoles: string[]) => {
       const token = authHeader.split(' ')[1];
 
       const decodedToken: any = jwt.verify(token, JWT_SIGN!);
-      const userRole = decodedToken.role; // Replace 'role' with the actual field in your decoded token containing the user's role
+      const userRole = decodedToken.role; 
       if (allowedRoles.includes(userRole)) {
-        next(); // User is authenticated and has an allowed role, proceed to the next middleware or route handler.
+        next(); 
       } else {
         res.status(403).json({
           message: 'Forbidden',

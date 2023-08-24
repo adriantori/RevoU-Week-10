@@ -138,19 +138,18 @@ paths:
       responses:
         '200':
           description: Transfer request created
-  /:
     patch:
       security:
         - bearer: []
       summary: Update Transfer Request
       operationId: updateTransferRequest
-      parameters:        # Add the parameter here
+      parameters:
         - name: transactionId
-          in: path        # Parameter is in the path
+          in: path
           description: ID of the transaction to be updated
           required: true
           schema:
-            type: string   # Change the type to match the actual type of the transaction ID
+            type: string
       requestBody:
         description: Transfer update data
         required: true
@@ -186,6 +185,40 @@ paths:
       responses:
         '200':
           description: Transfer request deleted
+  /transfer/history:
+    get:
+      security:
+        - bearer: []
+      summary: Get Transfer History
+      operationId: getHistory
+      parameters:
+        - name: startDate
+          in: query
+          description: 'Filter by created Date: start'
+          schema:
+            type: string
+            format: date
+          example: "2023-08-22"
+        - name: endDate
+          in: query
+          description: 'Filter by created Date: end'
+          schema:
+            type: string
+            format: date
+          example: "2023-08-24"
+        - name: statuses
+          in: query
+          description: Filter by statuses (comma-separated)
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+          example: "rejected,approved"
+      responses:
+        '200':
+          description: Successful response
   /users:
     get:
       summary: Get All Users

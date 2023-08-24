@@ -27,9 +27,9 @@ const auth = (allowedRoles) => {
             }
             const token = authHeader.split(' ')[1];
             const decodedToken = jsonwebtoken_1.default.verify(token, jwt_1.default);
-            const userRole = decodedToken.role; // Replace 'role' with the actual field in your decoded token containing the user's role
+            const userRole = decodedToken.role;
             if (allowedRoles.includes(userRole)) {
-                next(); // User is authenticated and has an allowed role, proceed to the next middleware or route handler.
+                next();
             }
             else {
                 res.status(403).json({
