@@ -7,7 +7,7 @@ class AuthDao {
     this.db = db;
   }
 
-  async createUser(username: string, role: string, password: string): Promise<any> {
+  async registerUser(username: string, role: string, password: string): Promise<any> {
     try {
       const user = await this.db.collection('users').insertOne({ username, role, password });
       return user;
@@ -22,6 +22,15 @@ class AuthDao {
       return user
     } catch (error: any) {
       throw new Error('Error getting any user:' + error.message)
+    }
+  }
+
+  async loginUser(username: string):Promise<any> {
+    try {
+      const user = await this.db.collection('users').findOne({ username });
+      return user
+    } catch (error: any) {
+      throw new Error('Error finding user: ' + error.message);
     }
   }
 }

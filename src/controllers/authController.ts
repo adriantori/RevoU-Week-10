@@ -1,13 +1,17 @@
 import { Request, Response } from 'express';
 import { AuthDao } from '../dao/authDao';
+import AuthService from '../services/authService';
+import jwt from 'jsonwebtoken';
+import JWT_SIGN from '../config/jwt';
 
-const createUser = async (req: Request, res: Response) => {
+const registerUser = async (req: Request, res: Response) => {
   const { username, role, password } = req.body;
 
   try {
-    const authDao = new AuthDao(req.db); // Create authDao instance with the request's db reference
-
-    const user = await authDao.createUser(username, role, password);
+    const authDao = new AuthDao(req.db);
+    const authService = new AuthService(authDao);
+    
+    const user = await authService.registerUser(username, role, password);
     res.status(200).json({
       message: 'success',
       data: user
@@ -19,15 +23,37 @@ const createUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+const loginUser = async (req: Request, res:Response) => {
+  const { username, password } = req.body;
+  
+  const authDao = new AuthDao(req.db);
+  const authService = new AuthService(authDao);
+
+  const user = await authService.loginUser(username, password)
+
+  if(user){
+    const token = jwt.sign({ username: user.username, id: user._id, role: user.role}, JWT_SIGN!)
+    res.status(200).json({
+      message: 'User successfully logged in',
+      data: token
+    });
+  }else {
+    res.status(400).json({
+      error: 'password is incorrect'
+    });
+  }
+}
 
 const getAllUsers = async (req: Request, res: Response) => {
   try {
-    const authDao = new AuthDao(req.db); // Create authDao instance with the request's db reference
+    const authDao = new AuthDao(req.db);
+    const authService = new AuthService(authDao);
 
-    const user = await authDao.getAllUser();
+    const users = await authService.getAllUsers();
     res.status(200).json({
       message: 'success',
-      data: user
+      data: users
     });
   } catch (error: any) {
     res.status(500).json({
@@ -37,4 +63,4 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
-export { createUser, getAllUsers };
+export { registerUser, getAllUsers, loginUser };

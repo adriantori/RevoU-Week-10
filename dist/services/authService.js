@@ -8,44 +8,42 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthDao = void 0;
-class AuthDao {
-    constructor(db) {
-        this.db = db;
+const bcrypt_1 = __importDefault(require("bcrypt"));
+class AuthService {
+    constructor(authDao) {
+        this.authDao = authDao;
     }
     registerUser(username, role, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const user = yield this.db.collection('users').insertOne({ username, role, password });
-                return user;
-            }
-            catch (error) {
-                throw new Error('Error creating user: ' + error.message);
-            }
+            const hashedPassword = yield bcrypt_1.default.hash(password, 10);
+            return yield this.authDao.registerUser(username, role, hashedPassword);
         });
     }
-    getAllUser() {
+    getAllUsers() {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const user = yield this.db.collection('users').find().toArray();
-                return user;
-            }
-            catch (error) {
-                throw new Error('Error getting any user:' + error.message);
-            }
+            return yield this.authDao.getAllUser();
         });
     }
-    loginUser(username) {
+    loginUser(username, password) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user = yield this.db.collection('users').findOne({ username });
-                return user;
+                const user = yield this.authDao.loginUser(username);
+                if (user) {
+                    const isPasswordCorrect = yield bcrypt_1.default.compare(password, user.password);
+                    if (isPasswordCorrect) {
+                        return user;
+                    }
+                }
+                return null;
             }
             catch (error) {
-                throw new Error('Error finding user: ' + error.message);
+                throw new Error("login error: " + error.message);
             }
         });
     }
 }
-exports.AuthDao = AuthDao;
+exports.default = AuthService;

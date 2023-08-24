@@ -7,7 +7,7 @@ class TransferDao {
     this.db = db;
   }
 
-  async createTransfer(amount: number, currency: string, sourceAccount: number, destinationAccount: number): Promise<any> {
+  async createTransfer(amount: number, currency: string, sourceAccount: string, destinationAccount: string): Promise<any> {
     try {
       const user = await this.db.collection('transfer').insertOne({ amount, currency, sourceAccount, destinationAccount, status:"pending" });
       return user;

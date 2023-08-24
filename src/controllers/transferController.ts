@@ -1,16 +1,18 @@
 import { Request, Response } from 'express';
 import { TransferDao } from '../dao/transferDao';
+import TransferService from '../services/transferService'; // Update the path as needed
 
 const createTransfer = async (req: Request, res: Response) => {
   const { amount, currency, sourceAccount, destinationAccount } = req.body;
 
   try {
-    const transferDao = new TransferDao(req.db); // Create authDao instance with the request's db reference
-
-    const user = await transferDao.createTransfer(amount, currency, sourceAccount, destinationAccount);
+    const transferDao = new TransferDao(req.db);
+    const transferService = new TransferService(transferDao);
+    
+    const transfer = await transferService.createTransfer(amount, currency, sourceAccount, destinationAccount);
     res.status(200).json({
       message: 'success',
-      data: user
+      data: transfer
     });
   } catch (error: any) {
     res.status(500).json({
@@ -20,14 +22,15 @@ const createTransfer = async (req: Request, res: Response) => {
   }
 };
 
-const getAllTransfer = async (req: Request, res: Response) => {
+const getAllTransfers = async (req: Request, res: Response) => {
   try {
-    const transferDao = new TransferDao(req.db); // Create authDao instance with the request's db reference
+    const transferDao = new TransferDao(req.db);
+    const transferService = new TransferService(transferDao);
 
-    const user = await transferDao.getAllTransfer();
+    const transfers = await transferService.getAllTransfers();
     res.status(200).json({
       message: 'success',
-      data: user
+      data: transfers
     });
   } catch (error: any) {
     res.status(500).json({
@@ -37,4 +40,4 @@ const getAllTransfer = async (req: Request, res: Response) => {
   }
 };
 
-export { createTransfer, getAllTransfer };
+export { createTransfer, getAllTransfers };

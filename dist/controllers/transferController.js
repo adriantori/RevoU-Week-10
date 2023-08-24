@@ -8,17 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllTransfer = exports.createTransfer = void 0;
+exports.getAllTransfers = exports.createTransfer = void 0;
 const transferDao_1 = require("../dao/transferDao");
+const transferService_1 = __importDefault(require("../services/transferService")); // Update the path as needed
 const createTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { amount, currency, sourceAccount, destinationAccount } = req.body;
     try {
-        const transferDao = new transferDao_1.TransferDao(req.db); // Create authDao instance with the request's db reference
-        const user = yield transferDao.createTransfer(amount, currency, sourceAccount, destinationAccount);
+        const transferDao = new transferDao_1.TransferDao(req.db);
+        const transferService = new transferService_1.default(transferDao);
+        const transfer = yield transferService.createTransfer(amount, currency, sourceAccount, destinationAccount);
         res.status(200).json({
             message: 'success',
-            data: user
+            data: transfer
         });
     }
     catch (error) {
@@ -29,13 +34,14 @@ const createTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.createTransfer = createTransfer;
-const getAllTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllTransfers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const transferDao = new transferDao_1.TransferDao(req.db); // Create authDao instance with the request's db reference
-        const user = yield transferDao.getAllTransfer();
+        const transferDao = new transferDao_1.TransferDao(req.db);
+        const transferService = new transferService_1.default(transferDao);
+        const transfers = yield transferService.getAllTransfers();
         res.status(200).json({
             message: 'success',
-            data: user
+            data: transfers
         });
     }
     catch (error) {
@@ -45,4 +51,4 @@ const getAllTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
 });
-exports.getAllTransfer = getAllTransfer;
+exports.getAllTransfers = getAllTransfers;
