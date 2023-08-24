@@ -2,11 +2,11 @@ import jwt from 'jsonwebtoken';
 import JWT_SIGN from '../config/jwt';
 import { Request, Response, NextFunction } from 'express';
 
-const authn = (allowedRoles: string[]) => {
+const auth = (allowedRoles: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const authnHeader = req.headers.authorization;
+    const authHeader = req.headers.authorization;
     try {
-      if (!authnHeader) {
+      if (!authHeader) {
         res.status(401).json({
           message: 'Unauthorized',
           error: 'No authentication header provided'
@@ -14,7 +14,7 @@ const authn = (allowedRoles: string[]) => {
         return;
       }
   
-      const token = authnHeader.split(' ')[1];
+      const token = authHeader.split(' ')[1];
 
       const decodedToken: any = jwt.verify(token, JWT_SIGN!);
       const userRole = decodedToken.role; // Replace 'role' with the actual field in your decoded token containing the user's role
@@ -35,4 +35,4 @@ const authn = (allowedRoles: string[]) => {
   };
 };
 
-export default authn;
+export default auth;

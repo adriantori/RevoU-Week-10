@@ -14,18 +14,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const jwt_1 = __importDefault(require("../config/jwt"));
-const authn = (allowedRoles) => {
+const auth = (allowedRoles) => {
     return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        const authnHeader = req.headers.authorization;
+        const authHeader = req.headers.authorization;
         try {
-            if (!authnHeader) {
+            if (!authHeader) {
                 res.status(401).json({
                     message: 'Unauthorized',
                     error: 'No authentication header provided'
                 });
                 return;
             }
-            const token = authnHeader.split(' ')[1];
+            const token = authHeader.split(' ')[1];
             const decodedToken = jsonwebtoken_1.default.verify(token, jwt_1.default);
             const userRole = decodedToken.role; // Replace 'role' with the actual field in your decoded token containing the user's role
             if (allowedRoles.includes(userRole)) {
@@ -46,4 +46,4 @@ const authn = (allowedRoles) => {
         }
     });
 };
-exports.default = authn;
+exports.default = auth;
