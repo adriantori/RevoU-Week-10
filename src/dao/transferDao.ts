@@ -38,7 +38,7 @@ class TransferDao {
 
   async getAllTransfer(): Promise<any> {
     try {
-      const user = await this.db.collection('transfer').find().toArray();
+      const user = await this.db.collection('transfer').find({ isDeleted: { $exists: false } }).toArray();
       return user
     } catch (error: any) {
       throw new Error('Error getting any transfer:' + error.message)

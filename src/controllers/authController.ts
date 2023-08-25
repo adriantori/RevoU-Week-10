@@ -66,7 +66,7 @@ const loginUser = async (req: Request, res:Response) => {
   const user = await authService.loginUser(username, password)
 
   if(user){
-    const token = jwt.sign({ username: user.username, id: user._id, role: user.role}, JWT_SIGN!)
+    const token = jwt.sign({ username: user.username, role: user.role}, JWT_SIGN!)
     res.status(200).json({
       message: 'User successfully logged in',
       data: token

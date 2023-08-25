@@ -22,11 +22,11 @@ const swaggerDocument = yaml.parse(file);
 
 app.use(cors());
 app.use(express.json());
-// app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
-// app.use(openApiValidator.middleware({
-//   apiSpec: openApiPath,
-//   validateRequests: true
-// }));
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+app.use(openApiValidator.middleware({
+  apiSpec: openApiPath,
+  validateRequests: true
+}));
 
 const mongoUri = process.env.APP_MONGO_URI || "";
 const dbName = process.env.APP_MONGO_DB || "";

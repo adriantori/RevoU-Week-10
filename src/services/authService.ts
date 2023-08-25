@@ -21,7 +21,7 @@ class AuthService {
   async loginUser(username: string, password: string) {
     try {
       const user = await this.authDao.loginUser(username);
-
+      
       if (user) {
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if (isPasswordCorrect) {

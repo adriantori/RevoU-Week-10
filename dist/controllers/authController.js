@@ -69,7 +69,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const authService = new authService_1.default(authDao);
     const user = yield authService.loginUser(username, password);
     if (user) {
-        const token = jsonwebtoken_1.default.sign({ username: user.username, id: user._id, role: user.role }, jwt_1.default);
+        const token = jsonwebtoken_1.default.sign({ username: user.username, role: user.role }, jwt_1.default);
         res.status(200).json({
             message: 'User successfully logged in',
             data: token

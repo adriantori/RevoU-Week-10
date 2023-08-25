@@ -7,8 +7,10 @@ const express_1 = __importDefault(require("express"));
 const mongoConnection_1 = require("./middlewares/mongoConnection");
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const yaml_1 = __importDefault(require("yaml"));
 const fs_1 = __importDefault(require("fs"));
+const openApiValidator = require("express-openapi-validator");
 const authRoute_1 = require("./routes/authRoute");
 const transferRoute_1 = __importDefault(require("./routes/transferRoute"));
 dotenv_1.default.config();
@@ -19,11 +21,11 @@ const file = fs_1.default.readFileSync(openApiPath, 'utf8');
 const swaggerDocument = yaml_1.default.parse(file);
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-// app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
-// app.use(openApiValidator.middleware({
-//   apiSpec: openApiPath,
-//   validateRequests: true
-// }));
+app.use('/', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
+app.use(openApiValidator.middleware({
+    apiSpec: openApiPath,
+    validateRequests: true
+}));
 const mongoUri = process.env.APP_MONGO_URI || "";
 const dbName = process.env.APP_MONGO_DB || "";
 mongoConnection_1.MongoConnection.connect(mongoUri, dbName)

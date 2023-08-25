@@ -13,7 +13,7 @@ const auth = (allowedRoles: string[]) => {
         });
         return;
       }
-  
+
       const token = authHeader.split(' ')[1];
 
       const decodedToken: any = jwt.verify(token, JWT_SIGN!);
