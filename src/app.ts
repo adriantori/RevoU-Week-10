@@ -55,7 +55,7 @@ MongoConnection.connect(mongoUri, dbName)
     });
   })
   .catch(error => {
-    console.error("Errors connecting to the database:", error);
+    console.error("Error connecting to the database:", error);
   });
 
 export default app;
