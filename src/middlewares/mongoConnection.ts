@@ -6,8 +6,10 @@ class MongoConnection {
 
   static async connect(uri: string, dbName: string): Promise<void> {
     this.client = new MongoClient(uri);
+    console.log("URI:", uri);
     await this.client.connect();
     this.db = this.client.db(dbName);
+    console.log("dbName:", dbName);
   }
 
   static getDb(): Db {

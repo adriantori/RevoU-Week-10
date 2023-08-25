@@ -15,8 +15,10 @@ class MongoConnection {
     static connect(uri, dbName) {
         return __awaiter(this, void 0, void 0, function* () {
             this.client = new mongodb_1.MongoClient(uri);
+            console.log("URI:", uri);
             yield this.client.connect();
             this.db = this.client.db(dbName);
+            console.log("dbName:", dbName);
         });
     }
     static getDb() {

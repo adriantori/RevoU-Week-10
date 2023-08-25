@@ -24,6 +24,8 @@ app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 const mongoUri = process.env.APP_MONGO_URI || "";
 const dbName = process.env.APP_MONGO_DB || "";
+console.log("app URI:", mongoUri);
+console.log("app dbName:", dbName);
 mongoConnection_1.MongoConnection.connect(mongoUri, dbName)
     .then(() => {
     const addDbToRequest = (req, res, next) => {
