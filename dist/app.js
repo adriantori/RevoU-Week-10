@@ -15,7 +15,7 @@ const authRoute_1 = require("./routes/authRoute");
 const transferRoute_1 = __importDefault(require("./routes/transferRoute"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const port = process.env.APP_PORT || 3000;
+const port = process.env.PORT || 3000;
 const openApiPath = './docs/swaggerDocumentation.yaml';
 const file = fs_1.default.readFileSync(openApiPath, 'utf8');
 const swaggerDocument = js_yaml_1.default.load(file);
