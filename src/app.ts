@@ -3,7 +3,7 @@ import { MongoConnection } from "./middlewares/mongoConnection";
 import dotenv from "dotenv";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
-import yaml from "yaml";
+import yaml from "js-yaml";
 import fs from "fs";
 import openApiValidator = require("express-openapi-validator");
 
@@ -18,7 +18,7 @@ const port = process.env.APP_PORT || 3000;
 
 const openApiPath = './docs/swaggerDocumentation.yaml';
 const file = fs.readFileSync(openApiPath, 'utf8');
-const swaggerDocument = yaml.parse(file);
+const swaggerDocument = yaml.load(file);
 
 app.use(cors());
 app.use(express.json());
@@ -38,7 +38,7 @@ MongoConnection.connect(mongoUri, dbName)
     app.use("/api/v1", authRoute);
     app.use("/api/v1", transferRoute);
 
-    app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+    app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument!))
 
     app.use(openApiValidator.middleware({
       apiSpec: openApiPath,
