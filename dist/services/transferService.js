@@ -33,5 +33,10 @@ class TransferService {
             return yield this.transferDao.deleteTransfer(transactionId);
         });
     }
+    getHistory(startDate, endDate, statusArray) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.transferDao.getHistory(startDate, endDate, statusArray);
+        });
+    }
 }
 exports.default = TransferService;

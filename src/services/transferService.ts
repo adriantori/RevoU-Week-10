@@ -23,6 +23,10 @@ class TransferService {
   async deleteTransfer(transactionId: ObjectId){
     return await this.transferDao.deleteTransfer(transactionId);
   }
+
+  async getHistory(startDate?: string, endDate?: string, statusArray?: string[]){
+    return await this.transferDao.getHistory(startDate, endDate, statusArray);
+  }
 }
 
 export default TransferService;

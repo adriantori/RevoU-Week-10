@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createTransfer, deleteTransfer, getAllTransfers, patchTransfer } from "../controllers/transferController";
+import { createTransfer, deleteTransfer, getAllTransfers, getHistory, patchTransfer } from "../controllers/transferController";
 import auth from "../middlewares/auth";
 
 const transferRoute = Router()
@@ -10,6 +10,8 @@ transferRoute.get('/transfer', auth(["maker", "approver","admin"]), getAllTransf
 
 transferRoute.patch('/transfer/:id', auth(["approver","admin"]), patchTransfer);
 
-transferRoute.delete('/transfer:id', auth(["admin"]), deleteTransfer);
+transferRoute.delete('/transfer/:id', auth(["admin"]), deleteTransfer);
+
+transferRoute.get('/transfer/history', auth(["admin"]), getHistory);
 
 export default transferRoute;

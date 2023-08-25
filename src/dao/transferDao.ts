@@ -7,9 +7,19 @@ class TransferDao {
     this.db = db;
   }
 
+  formatDate(): string {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    const day = currentDate.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+
   async createTransfer(amount: number, currency: string, sourceAccount: string, destinationAccount: string): Promise<any> {
     try {
-      const currentDate = new Date();
+      const currentDate = this.formatDate();
+
 
       const transferData = {
         amount,
@@ -37,8 +47,16 @@ class TransferDao {
 
   async updateTransfer(transferId: ObjectId, status: string): Promise<any> {
     try {
-      const currentDate = new Date();
-      const user = await this.db.collection('transfer').updateOne({ _id: transferId }, { $set: { status: status, updatedAt: currentDate } });
+      const currentDate = this.formatDate();
+      const user = await this.db.collection('transfer').updateOne(
+        { _id: transferId },
+        {
+          $set: {
+            status,
+            updatedAt: currentDate
+          }
+        }
+      );
       return user;
     } catch (error: any) {
       throw new Error('Error updating data:' + error.message);
@@ -54,13 +72,13 @@ class TransferDao {
     }
   }
 
-  async getHistory(startDate?: string, endDate?: string, statuses?: string[]): Promise<any[]> {
+  async getHistory(startDate?: string, endDate?: string, statusArray?: string[]): Promise<any[]> {
     try {
       const query: any = {};
 
-      if (startDate) query.startDate = { $gte: new Date(startDate) };
-      if (endDate) query.endDate = { $lte: new Date(endDate) };
-      if (statuses && statuses.length > 0) query.status = { $in: statuses };
+      if (startDate) query.createdAt = { $gte: startDate };
+      if (endDate) query.createdAt = { $lte: endDate };
+      if (statusArray && statusArray.length > 0) query.status = { $in: statusArray };
 
       const user = await this.db.collection('transfer').find(query).toArray();
       return user;

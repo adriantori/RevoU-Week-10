@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTransfer = exports.patchTransfer = exports.getAllTransfers = exports.createTransfer = void 0;
+exports.getHistory = exports.deleteTransfer = exports.patchTransfer = exports.getAllTransfers = exports.createTransfer = void 0;
 const transferDao_1 = require("../dao/transferDao");
 const transferService_1 = __importDefault(require("../services/transferService"));
 const mongodb_1 = require("mongodb");
@@ -100,3 +100,26 @@ const deleteTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.deleteTransfer = deleteTransfer;
+const getHistory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { startDate = '', endDate = '', statuses = '' } = req.query;
+        let statusArray;
+        if (typeof statuses === 'string' && statuses.length > 0) {
+            statusArray = statuses.split(',');
+        }
+        const transferDao = new transferDao_1.TransferDao(req.db);
+        const transferService = new transferService_1.default(transferDao);
+        const transfers = yield transferService.getHistory(startDate, endDate, statusArray);
+        res.status(200).json({
+            message: 'success',
+            data: transfers
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: 'error',
+            error: error.message
+        });
+    }
+});
+exports.getHistory = getHistory;

@@ -14,10 +14,17 @@ class TransferDao {
     constructor(db) {
         this.db = db;
     }
+    formatDate() {
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+        const day = currentDate.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
     createTransfer(amount, currency, sourceAccount, destinationAccount) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const currentDate = new Date();
+                const currentDate = this.formatDate();
                 const transferData = {
                     amount,
                     currency,
@@ -48,8 +55,13 @@ class TransferDao {
     updateTransfer(transferId, status) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const currentDate = new Date();
-                const user = yield this.db.collection('transfer').updateOne({ _id: transferId }, { $set: { status: status, updatedAt: currentDate } });
+                const currentDate = this.formatDate();
+                const user = yield this.db.collection('transfer').updateOne({ _id: transferId }, {
+                    $set: {
+                        status,
+                        updatedAt: currentDate
+                    }
+                });
                 return user;
             }
             catch (error) {
@@ -68,16 +80,16 @@ class TransferDao {
             }
         });
     }
-    getHistory(startDate, endDate, statuses) {
+    getHistory(startDate, endDate, statusArray) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const query = {};
                 if (startDate)
-                    query.startDate = { $gte: new Date(startDate) };
+                    query.createdAt = { $gte: startDate };
                 if (endDate)
-                    query.endDate = { $lte: new Date(endDate) };
-                if (statuses && statuses.length > 0)
-                    query.status = { $in: statuses };
+                    query.createdAt = { $lte: endDate };
+                if (statusArray && statusArray.length > 0)
+                    query.status = { $in: statusArray };
                 const user = yield this.db.collection('transfer').find(query).toArray();
                 return user;
             }
