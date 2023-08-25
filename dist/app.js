@@ -21,11 +21,6 @@ const file = fs_1.default.readFileSync(openApiPath, 'utf8');
 const swaggerDocument = yaml_1.default.parse(file);
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-app.use('/', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
-app.use(openApiValidator.middleware({
-    apiSpec: openApiPath,
-    validateRequests: true
-}));
 const mongoUri = process.env.APP_MONGO_URI || "";
 const dbName = process.env.APP_MONGO_DB || "";
 mongoConnection_1.MongoConnection.connect(mongoUri, dbName)
@@ -37,6 +32,11 @@ mongoConnection_1.MongoConnection.connect(mongoUri, dbName)
     app.use(addDbToRequest);
     app.use("/api/v1", authRoute_1.authRoute);
     app.use("/api/v1", transferRoute_1.default);
+    app.use('/', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
+    app.use(openApiValidator.middleware({
+        apiSpec: openApiPath,
+        validateRequests: true
+    }));
     app.listen(port, () => {
         console.log(`Running on port ${port}`);
     });

@@ -63,9 +63,9 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.registerUser = registerUser;
-const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const loginUser = (req, res, authDao) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
-    const authDao = new authDao_1.AuthDao(req.db);
+    authDao = new authDao_1.AuthDao(req.db);
     const authService = new authService_1.default(authDao);
     const user = yield authService.loginUser(username, password);
     if (user) {

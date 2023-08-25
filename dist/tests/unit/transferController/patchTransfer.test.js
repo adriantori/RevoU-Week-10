@@ -12,47 +12,55 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongodb_1 = require("mongodb"); // Assuming you're using MongoDB for ObjectId
 const transferService_1 = __importDefault(require("../../../services/transferService"));
-const transferDao_1 = require("../../../dao/transferDao");
+const mongodb_1 = require("mongodb");
 const transferController_1 = require("../../../controllers/transferController");
-const mongoConnection_1 = require("../../../middlewares/mongoConnection");
-// Mocking Express request and response objects
-const mockRequest = (overrides = {}) => (Object.assign({ params: { id: 'mockId' }, body: { status: 'approved' }, db: mongoConnection_1.MongoConnection.getDb }, overrides));
-const mockResponse = () => {
-    const res = {};
-    res.status = jest.fn().mockReturnValue(res);
-    res.json = jest.fn().mockReturnValue(res);
-    return res;
-};
-describe('patchTransfer', () => {
-    it('should respond with success message and data on valid input', () => __awaiter(void 0, void 0, void 0, function* () {
-        const mockDb = mongoConnection_1.MongoConnection.getDb(); // Mock your database connection
-        // Mocking TransferDao and TransferService
-        class MockTransferDao extends transferDao_1.TransferDao {
-            findOne(query) {
-                return __awaiter(this, void 0, void 0, function* () {
-                    return null; // Mocking the behavior of findOne
-                });
-            }
-        }
-        const mockTransferService = new transferService_1.default(new MockTransferDao(mockDb));
-        const req = {
-            params: { id: 'mockId' },
-            body: { status: 'approved' },
-            db: mockDb,
-        };
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn(),
-        };
-        jest.spyOn(mongodb_1.ObjectId, 'isValid').mockReturnValue(true);
+// Mocks
+jest.mock('../../../services/transferService');
+jest.mock('mongodb');
+describe('patchTransfer function', () => {
+    const mockRequest = (body, params) => ({
+        body,
+        params
+    });
+    const mockResponse = () => {
+        const res = {};
+        res.status = jest.fn().mockReturnValue(res);
+        res.json = jest.fn().mockReturnValue(res);
+        return res;
+    };
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+    it('should update a transfer status', () => __awaiter(void 0, void 0, void 0, function* () {
+        const req = mockRequest({ status: 'approved' }, { id: 'transfer-id' });
+        const res = mockResponse();
+        // Mock ObjectId constructor
+        mongodb_1.ObjectId.mockImplementation((id) => id);
+        // Mock TransferService's updateTransfer to return an updated transfer object
+        transferService_1.default.prototype.updateTransfer.mockResolvedValue({
+            // Define the properties of the updated transfer object here
+            id: 'transfer-id',
+            status: 'approved'
+        });
         yield (0, transferController_1.patchTransfer)(req, res);
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith({
             message: 'success',
-            data: expect.any(Object),
+            data: {
+                id: 'transfer-id',
+                status: 'approved'
+            }
         });
     }));
-    // ... other test cases ...
+    it('should handle invalid status', () => __awaiter(void 0, void 0, void 0, function* () {
+        const req = mockRequest({ status: 'invalid-status' }, { id: 'transfer-id' });
+        const res = mockResponse();
+        yield (0, transferController_1.patchTransfer)(req, res);
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+            message: 'error',
+            error: 'Invalid status. Status must be either "approved" or "rejected".'
+        });
+    }));
 });
