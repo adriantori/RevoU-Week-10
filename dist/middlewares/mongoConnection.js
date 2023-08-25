@@ -23,6 +23,7 @@ class MongoConnection {
         if (!this.db) {
             throw new Error('Database connection not established.');
         }
+        console.log("getDb");
         return this.db;
     }
 }

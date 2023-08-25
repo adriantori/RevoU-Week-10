@@ -19,6 +19,7 @@ const port = process.env.APP_PORT || 3000;
 const openApiPath = './docs/swaggerDocumentation.yaml';
 const file = fs_1.default.readFileSync(openApiPath, 'utf8');
 const swaggerDocument = js_yaml_1.default.load(file);
+console.log(swaggerDocument);
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 const mongoUri = process.env.APP_MONGO_URI || "";
@@ -44,3 +45,4 @@ mongoConnection_1.MongoConnection.connect(mongoUri, dbName)
     .catch(error => {
     console.error("Errors connecting to the database:", error);
 });
+exports.default = app;

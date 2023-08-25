@@ -20,6 +20,8 @@ const openApiPath = './docs/swaggerDocumentation.yaml';
 const file = fs.readFileSync(openApiPath, 'utf8');
 const swaggerDocument = yaml.load(file);
 
+console.log(swaggerDocument);
+
 app.use(cors());
 app.use(express.json());
 
@@ -52,3 +54,5 @@ MongoConnection.connect(mongoUri, dbName)
   .catch(error => {
     console.error("Errors connecting to the database:", error);
   });
+
+export default app;
