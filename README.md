@@ -6,25 +6,19 @@ Creates bank transfer application using authentication middleware, service, and 
 
 1. Back-end is written using Typescript, ExpressJS, and NodeJS, with MongoDB as NoSQL.
 
-2. 
+2. There's only 2 roles, maker and approver.
+
+3. Password can only contain alphanumeric with min length of 8.
 
 ## Advanced Information - Back-End
 
-1. There's no Authentication, so you can use it as is.
+1. Create Admin role.
 
-2. If user accessed invalid API Endpoint, it will be blocked and instead return HTTP 404.
+2. Can soft-delete data.
 
-3. After any query, database connection is closed using mysql.end() function.
+3. Get all transfer must only show the undeleted.
 
-4. Back-end will check if data exist on Redis before querying to the MySQL Database.
-   
-   1. If data exist, then it returns data obtained from Redis.
-   
-   2. Else, it will query from MySQL, save it to Redis, and returns data.
-   
-   3. Redis data will persist for 1 minute.
-
-5. When connection successfully established, it will be shown on Console.
+4. Look up History end-point
 
 ## API Endpoint
 
