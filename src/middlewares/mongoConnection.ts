@@ -11,6 +11,9 @@ class MongoConnection {
   }
 
   static getDb(): Db {
+    if (!this.db) {
+      throw new Error('Database connection not established.');
+    }
     return this.db;
   }
 }

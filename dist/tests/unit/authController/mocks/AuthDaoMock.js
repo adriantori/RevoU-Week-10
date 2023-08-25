@@ -9,21 +9,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MongoConnection = void 0;
-const mongodb_1 = require("mongodb");
-class MongoConnection {
-    static connect(uri, dbName) {
+class AuthDaoMock {
+    constructor(db) {
+        this.db = db;
+    }
+    loginUser(username) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.client = new mongodb_1.MongoClient(uri);
-            yield this.client.connect();
-            this.db = this.client.db(dbName);
+            try {
+                const user = yield this.db.collection('users').findOne({ username });
+                return user;
+            }
+            catch (error) {
+                throw new Error('Error finding user: ' + error.message);
+            }
         });
     }
-    static getDb() {
-        if (!this.db) {
-            throw new Error('Database connection not established.');
-        }
-        return this.db;
-    }
 }
-exports.MongoConnection = MongoConnection;
+exports.default = AuthDaoMock;

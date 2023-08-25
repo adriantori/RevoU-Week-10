@@ -57,10 +57,10 @@ const registerUser = async (req: Request, res: Response) => {
   }
 };
 
-const loginUser = async (req: Request, res:Response) => {
+const loginUser = async (req: Request, res:Response, authDao: AuthDao) => {
   const { username, password } = req.body;
   
-  const authDao = new AuthDao(req.db);
+  authDao = new AuthDao(req.db);
   const authService = new AuthService(authDao);
 
   const user = await authService.loginUser(username, password)

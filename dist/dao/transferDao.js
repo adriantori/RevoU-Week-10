@@ -44,7 +44,7 @@ class TransferDao {
     getAllTransfer() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user = yield this.db.collection('transfer').find().toArray();
+                const user = yield this.db.collection('transfer').find({ isDeleted: { $exists: false } }).toArray();
                 return user;
             }
             catch (error) {
