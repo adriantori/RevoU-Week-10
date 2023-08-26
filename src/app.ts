@@ -40,12 +40,12 @@ MongoConnection.connect(mongoUri, dbName)
     app.use("/api/v1", authRoute);
     app.use("/api/v1", transferRoute);
 
-    app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument!))
-
     app.use(openApiValidator.middleware({
       apiSpec: openApiPath,
       validateRequests: true
     }));
+
+    app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument!))
 
     app.listen(port, () => {
       console.log(`Running on port ${port}`);
