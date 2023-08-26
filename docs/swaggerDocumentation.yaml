@@ -164,7 +164,7 @@ paths:
         description: Transfer update data
         required: true
         content:
-          text/plain:
+          application/json:
             schema:
               type: object
               properties:
