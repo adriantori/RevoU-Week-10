@@ -35,7 +35,7 @@ mongoConnection_1.MongoConnection.connect(mongoUri, dbName)
     app.use("/api/v1", transferRoute_1.default);
     app.use(openApiValidator.middleware({
         apiSpec: openApiPath,
-        validateRequests: true
+        validateRequests: false
     }));
     app.use('/', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
     app.listen(port, () => {

@@ -146,6 +146,7 @@ paths:
           description: Transfer request created
         '500':
           description: Create transfer fatal error
+  /transfer/{transactionId}:
     patch:
       security:
         - bearer: []
@@ -160,6 +161,7 @@ paths:
           required: true
           schema:
             type: string
+          example: "64e9776a6cb750c37bf0668d"
       requestBody:
         description: Transfer update data
         required: true
@@ -173,10 +175,8 @@ paths:
                   enum:
                     - approved
                     - rejected
-              example: |
-                {
-                    "status": "approved"
-                }
+              example:
+                status: rejected
       responses:
         '200':
           description: Transfer request updated

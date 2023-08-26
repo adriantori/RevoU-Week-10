@@ -42,7 +42,7 @@ MongoConnection.connect(mongoUri, dbName)
 
     app.use(openApiValidator.middleware({
       apiSpec: openApiPath,
-      validateRequests: true
+      validateRequests: false
     }));
 
     app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument!))
