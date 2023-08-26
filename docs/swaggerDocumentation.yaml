@@ -4,8 +4,6 @@ info:
   version: '1.0'
   description: 'Back-end API for transfering money from user to other user. Middleware, authentication, and authorization assignment.'
 servers:
-  - url: http://localhost:3000/api/v1
-    description: 'Local development server'
   - url: https://adriantori-w10-be.up.railway.app/api/v1
     description: 'Deployment Server'
 components:
@@ -35,7 +33,7 @@ components:
         password:
           type: string
           minLength: 8
-          pattern: "^[a-zA-Z0-9]+$"
+          pattern: "^[a-zA-Z0-9]$"
       example:
         username: maker123
         role: maker
@@ -94,6 +92,8 @@ paths:
       responses:
         '200':
           description: Registration successful
+        '400':
+          description: Input error.
   /login:
     post:
       summary: User Login
@@ -111,6 +111,8 @@ paths:
       responses:
         '200':
           description: Login successful
+        '400':
+          description: Password incorrect
   /transfer:
     get:
       security:
@@ -120,6 +122,8 @@ paths:
       responses:
         '200':
           description: Successful response
+        '500':
+          description: Get transfer fatal error
     post:
       security:
         - bearer: []
@@ -140,6 +144,8 @@ paths:
       responses:
         '200':
           description: Transfer request created
+        '500':
+          description: Create transfer fatal error
     patch:
       security:
         - bearer: []
@@ -174,6 +180,10 @@ paths:
       responses:
         '200':
           description: Transfer request updated
+        '400':
+          description: Invalid status. Status must be either "approved" or "rejected"
+        '500':
+          description: Update fatal error.
     delete:
       security:
         - bearer: []
@@ -190,6 +200,8 @@ paths:
       responses:
         '200':
           description: Transfer request deleted
+        '500':
+          description: Delete fatal error.
   /transfer/history:
     get:
       security:
