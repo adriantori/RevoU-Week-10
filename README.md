@@ -66,7 +66,7 @@ Creates bank transfer application using authentication middleware, service, and 
 
 ## API Endpoint
 
-All of API Endpoint can be seen at : [Swagger Documentation](https://adriantori-w9-be.up.railway.app/)
+All of API Endpoint can be seen at : [Swagger Documentation](https://adriantori-w10-be.up.railway.app/)
 
 ## Deploy Link
 
