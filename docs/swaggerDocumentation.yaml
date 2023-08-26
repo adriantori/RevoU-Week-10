@@ -143,6 +143,8 @@ paths:
     patch:
       security:
         - bearer: []
+        - approver: []
+        - admin: []
       summary: Update Transfer Request
       operationId: updateTransferRequest
       parameters:
@@ -167,7 +169,7 @@ paths:
                     - rejected
               example: |
                 {
-                    "status": "pending"
+                    "status": "approved"
                 }
       responses:
         '200':
@@ -175,6 +177,7 @@ paths:
     delete:
       security:
         - bearer: []
+        - admin: []
       summary: Delete Transfer Request
       operationId: deleteTransferRequest
       parameters:          
@@ -191,6 +194,7 @@ paths:
     get:
       security:
         - bearer: []
+        - admin: []
       summary: Get Transfer History
       operationId: getHistory
       parameters:
